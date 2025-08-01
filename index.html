@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Grageas Mágicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2.decorated-title, h3 {
+            font-family: 'Cinzel', serif;
+        }
+        .font-luckiest {
+            font-family: 'Luckiest Guy', cursive;
+        }
+        /* Estilo para la barra de desplazamiento */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        .tab-btn.active {
+            border-color: #f59e0b; /* yellow-500 */
+            color: #f59e0b;
+            background-color: #374151; /* gray-700 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Columna de Configuración y Referencia -->
+        <div class="lg:col-span-1 flex flex-col gap-8">
+            <!-- Sección de Configuración -->
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700">
+                <h1 class="text-3xl font-bold text-yellow-400 mb-6 text-center">Configuración</h1>
+
+                <div class="space-y-4">
+                    <div>
+                        <label for="cantidadGrageas" class="block mb-2 text-sm font-medium text-gray-300">Número de Grageas (Máx. 5):</label>
+                        <input type="number" id="cantidadGrageas" value="1" min="1" max="5" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 block w-full p-2.5">
+                    </div>
+
+                    <div id="grageasContainer" class="space-y-6">
+                        <!-- Los selectores de grageas se insertarán aquí -->
+                    </div>
+
+                    <button id="abrirBtn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                        ✨ Abrir Grageas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sección de Sabores Disponibles -->
+            <div class="bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700">
+                <h2 class="text-2xl font-bold text-yellow-400 mb-4 text-center decorated-title">Sabores Disponibles</h2>
+                <div id="saboresList" class="max-h-80 overflow-y-auto pr-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                    <!-- La lista de sabores se insertará aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna de Resultados -->
+        <div class="lg:col-span-2">
+            <div class="bg-black p-6 rounded-2xl shadow-lg border border-gray-700 h-full flex flex-col min-h-[80vh] lg:min-h-0">
+                <!-- Pestañas para cambiar de vista -->
+                <div class="flex border-b border-gray-700 mb-4">
+                    <button id="tabDecorado" class="tab-btn active py-2 px-4 border-b-2 font-medium transition-colors duration-300">Decorado</button>
+                    <button id="tabSimple" class="tab-btn py-2 px-4 border-b-2 border-transparent font-medium text-gray-400 hover:text-yellow-400 transition-colors duration-300">Simple</button>
+                </div>
+
+                <!-- Contenedor de Resultados Decorados (visible por defecto) -->
+                <div id="panelDecorado" class="flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-yellow-400 decorated-title">Resultados</h2>
+                        <button id="copiarBtnDecorado" class="bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+                            Copiar Decorado
+                        </button>
+                    </div>
+                    <div class="relative flex-grow">
+                        <textarea id="resultadoTextoDecorado" readonly class="w-full h-full bg-black text-white font-mono p-4 rounded-md border border-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-500"></textarea>
+                    </div>
+                </div>
+
+                <!-- Contenedor de Resultados Simples (oculto por defecto) -->
+                <div id="panelSimple" class="hidden flex-col flex-grow">
+                     <div class="flex justify-end items-center mb-4">
+                         <button id="copiarBtnSimple" class="bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+                             Copiar Simple
+                         </button>
+                     </div>
+                    <div id="resultadoTextoSimpleContainer" class="w-full h-full bg-black text-white p-4 rounded-md border border-gray-600 overflow-y-auto">
+                        <h2 id="simpleTitle" class="text-4xl text-white font-luckiest tracking-wider mb-6"></h2>
+                        <div id="resultadoTextoSimple" style="white-space: pre-wrap; font-family: 'Inter', sans-serif; font-size: 1.1rem; line-height: 2;"></div>
+                    </div>
+                </div>
+
+                <!-- Mensaje de Copiado -->
+                <div id="copiadoMsg" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-6 py-3 rounded-lg text-lg opacity-0 transition-opacity duration-500 pointer-events-none">
+                    ¡Texto Copiado!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATOS DE SABORES ---
+            const sabores = [
+              { "tipo": "Explosión de Fresa", "emoji": "🍓" },
+              { "tipo": "Mango Maracuyá Boom", "emoji": "🥭" },
+              { "tipo": "Piña Colada Chill", "emoji": "🍍🥥" },
+              { "tipo": "Uva Cósmica", "emoji": "🍇" },
+              { "tipo": "Sandía Fresh Mint", "emoji": "🍉🌿" },
+              { "tipo": "Durazno Cítrico", "emoji": "🍑🍋" },
+              { "tipo": "Cereza Intensa", "emoji": "🍒" },
+              { "tipo": "Blueberry Limonada", "emoji": "🫐🍋" },
+              { "tipo": "Melón Sakura", "emoji": "🍈🌸" },
+              { "tipo": "Manzana Verde con Menta", "emoji": "🍏🍃" },
+              { "tipo": "Choco-Avellana Supreme", "emoji": "🍫🌰" },
+              { "tipo": "Galleta con Leche", "emoji": "🍪🥛" },
+              { "tipo": "Vainilla Miel Dorada", "emoji": "🍦🍯" },
+              { "tipo": "Moka Espresso", "emoji": "☕🍫" },
+              { "tipo": "Fresa Cheesecake", "emoji": "🧁🍓" },
+              { "tipo": "Caramelo Salado", "emoji": "🍮🥄" },
+              { "tipo": "Brownie de Nuez", "emoji": "🍫🥜" },
+              { "tipo": "Donita Glaseada", "emoji": "🍩✨" },
+              { "tipo": "Churro con Cajeta", "emoji": "🍫🔥" },
+              { "tipo": "Tarta de Limón Cremosa", "emoji": "🍋🍰" },
+              { "tipo": "Tamarindo Enchilado", "emoji": "🌶️🍬" },
+              { "tipo": "Pepino con Limón Ice", "emoji": "🥒🍋" },
+              { "tipo": "Lavanda con Miel", "emoji": "🌸🍯" },
+              { "tipo": "Matcha Tropical", "emoji": "🍵🥭" },
+              { "tipo": "Maracuyá con Jengibre", "emoji": "🫚🥭" },
+              { "tipo": "Rosa con Lichis", "emoji": "🌹🍒" },
+              { "tipo": "Uva con Sal de Jamaica", "emoji": "🍇🧂" },
+              { "tipo": "Plátano con Canela", "emoji": "🍌🌰" },
+              { "tipo": "Cereza Negra & Pimienta Rosa", "emoji": "�🌶️" },
+              { "tipo": "Hibisco con Granada", "emoji": "🌺🍷" },
+              { "tipo": "Cerveza de Mantequilla Espumosa", "emoji": "🍺" },
+              { "tipo": "Pastel de Calabaza Mágico", "emoji": "🧈" },
+              { "tipo": "Anti-Dementor (Chocolate Oscuro Protector)", "emoji": "🍫" },
+              { "tipo": "Explosión de Grageas Bertie Bott", "emoji": "🍬" },
+              { "tipo": "Manzana de Encantamiento", "emoji": "🍏✨" },
+              { "tipo": "Elixir de Fresa Encantada", "emoji": "🪄🍓" },
+              { "tipo": "Felix Felicis (Suerte Líquida de Piña)", "emoji": "🧪🍍" },
+              { "tipo": "Poción de Uvas Nocturnas", "emoji": "🍇🌙" },
+              { "tipo": "Miel de Hipogrifo", "emoji": "🦉🍯" },
+              { "tipo": "Fuego de Cereza Fénix", "emoji": "🍒🔥" },
+              { "tipo": "Encanto de Coco y Flor de Luna", "emoji": "🥥🌸" },
+              { "tipo": "Tarta de Nuez del Sombrero Seleccionador", "emoji": "🌰🧙" },
+              { "tipo": "Poción Pétalo de Amor (Amortentia)", "emoji": "🍓🍋" },
+              { "tipo": "Choco-Sapo Saltarín", "emoji": "🍫🧁" },
+              { "tipo": "Zumo de Calabaza Burbujeante", "emoji": "🧃🫧" },
+              { "tipo": "Vómito", "emoji": "🤮" },
+              { "tipo": "Huevo podrido", "emoji": "🥚🪰" },
+              { "tipo": "Cera de oído", "emoji": "👂🏻" },
+              { "tipo": "Moco", "emoji": "🤧" },
+              { "tipo": "Pasto", "emoji": "🌿" },
+              { "tipo": "Tierra", "emoji": "🟤" },
+              { "tipo": "Gusano", "emoji": "🐛" },
+              { "tipo": "Jabón", "emoji": "🫧" },
+              { "tipo": "Pimienta negra", "emoji": "♠️" },
+              { "tipo": "Salchicha", "emoji": "🌭" },
+              { "tipo": "Mugre de uñas", "emoji": "💅🏻" },
+              { "tipo": "Caspa de Troll", "emoji": "🧌" },
+              { "tipo": "Sudor", "emoji": "💦" },
+              { "tipo": "Axila", "emoji": "🦨" },
+              { "tipo": "Aceitunas", "emoji": "🫒" },
+              { "tipo": "Ajo crudo", "emoji": "🧄" },
+              { "tipo": "Alga marina", "emoji": "🪸" },
+              { "tipo": "Aliento de dragón", "emoji": "🐉🌬️" },
+              { "tipo": "Aliento de ogro", "emoji": "🧌" },
+              { "tipo": "Algodón de azúcar", "emoji": "🍭" },
+              { "tipo": "Arándanos", "emoji": "🫐" },
+              { "tipo": "Baba de caracol", "emoji": "🐌" },
+              { "tipo": "Bellini", "emoji": "🥂" },
+              { "tipo": "Biberón", "emoji": "🍼" },
+              { "tipo": "Blody Mary", "emoji": "🫗🩸" },
+              { "tipo": "Burrito", "emoji": "🌯" },
+              { "tipo": "Cacahuate", "emoji": "🥜" },
+              { "tipo": "Caña de azúcar", "emoji": "🎋" },
+              { "tipo": "Canela en polvo", "emoji": "🍂" }
+            ];
+
+            // --- INICIO: NUEVO SISTEMA DE PREMIOS POR RAREZA ---
+
+            // 1. Definimos las listas de premios por categoría
+            const premios = {
+              "Trastos": 
+                { "nombre": "🪙 -5.000 Galeones", "valor": -5000 },
+                { "nombre": "🪙 -3.000 Galeones", "valor": -3000 },
+                { "nombre": "🪙 -2.000 Galeones", "valor": -2000 },
+                { "nombre": "🪙 -1.500 Galeones", "valor": -1500 },
+                { "nombre": "🪙 -1.000 Galeones", "valor": -1000 },
+                { "nombre": "🪙 -900 Galeones", "valor": -900 },
+                { "nombre": "🪙 -800 Galeones", "valor": -800 },
+                { "nombre": "🪙 -700 Galeones", "valor": -700 },
+                { "nombre": "🪙 -500 Galeones", "valor": -500 },
+                { "nombre": "🪙 Debes donar 10.000 Galeones a alguien del caldero", "valor": -10000 },
+                { "nombre": "🪙 Debes donarle 5.000 Galeones a alguien", "valor": -5000 },
+                { "nombre": "🪙 +500 Galeones", "valor": 500 },
+                { "nombre": "🪙 +600 Galeones", "valor": 600 },
+                { "nombre": "🪙 +700 Galeones", "valor": 700 },
+                { "nombre": "🪙 +800 Galeones", "valor": 800 },
+                { "nombre": "🪙 +1.000 Galeones", "valor": 1000 }
+              ],
+              "Coleccionables": [
+                { "nombre": "Ranita Lila 🍫💜", "valor": 1000 },
+                { "nombre": "Ranita Azul 🍫💙", "valor": 1000 },
+                { "nombre": "Ranita Celeste 🍫🩵", "valor": 1500 },
+                { "nombre": "Ranita Turquesa 🍫🟢", "valor": 2000 },
+                { "nombre": "Ranita Verde 🍫💚", "valor": 1500 },
+                { "nombre": "Ranita Amarilla 🍫💛", "valor": 800 },
+                { "nombre": "Ranita Dorada 🍫🟠", "valor": 1200 },
+                { "nombre": "Ranita Naranja 🍫🧡", "valor": 900 },
+                { "nombre": "Ranita Roja 🍫❤️", "valor": 1000 },
+                { "nombre": "Ranita Rosa 🍫🩷", "valor": 700 },
+                { "nombre": "Ranita Fucsia 🍫🟣", "valor": 900 },
+                { "nombre": "Ranita Negra 🍫🖤", "valor": 1500 },
+                { "nombre": "Mapa del Merodeador 🗺️👣", "valor": 1500 },
+                { "nombre": "Collar de Slytherin 📿🐍", "valor": 1600 },
+                { "nombre": "Giratiempos ⏳🔁", "valor": 2000 },
+                { "nombre": "Escoba voladora 🧹🪽", "valor": 2500 },
+                { "nombre": "Horcruxes en general 🖤⚠️", "valor": 2700 },
+                { "nombre": "Varita mágica 🪄", "valor": 3000 }
+                { "nombre": "🪙 -10.000 Galeones", "valor": -10000 },
+                { "nombre": "🪙 -7.000 Galeones", "valor": -7000 }
+              ],
+              "Tesoros": [
+                { "nombre": "🪙 +1.500 Galeones", "valor": 1500 },
+                { "nombre": "🪙 +2.000 Galeones", "valor": 2000 },
+                { "nombre": "🪙 +3.000 Galeones", "valor": 3000 },
+                { "nombre": "🪙 +5.000 Galeones", "valor": 5000 },
+                { "nombre": "🪙 +7.000 Galeones", "valor": 7000 },
+                { "nombre": "🪙 +8.000 Galeones", "valor": 8000 },
+                { "nombre": "Anillo de Sorvolo Gaunt 💍☠️", "valor": 3000 },
+                { "nombre": "Piedra Filosofal 💎🟥", "valor": 3500 },
+                { "nombre": "Varita de Saúco 🌿🪄", "valor": 3500 },
+                { "nombre": "Snitch dorada 🟡✨", "valor": 4000 },
+                { "nombre": "Piedra de la Resurrección ⚫👻", "valor": 4000 },
+                { "nombre": "Diario de Tom Riddle 📓🖤", "valor": 4500 },
+                { "nombre": "Pluma autoentintable 🪶", "valor": 4600 },
+                { "nombre": "Sombrero Seleccionador 🎩🧠", "valor": 5000 },
+                { "nombre": "Libro de Pociones del Príncipe Mestizo 📖⚗️", "valor": 5000 },
+                { "nombre": "Lazo del Diablo 🌿🕸️", "valor": 5500 },
+                { "nombre": "Cáliz de fuego 🔥🏆", "valor": 6000 },
+                { "nombre": "Reloj de los Weasley 🕰️👨‍👩‍👧‍👦", "valor": 6000 }
+              ],
+              "Reliquias": [
+                { "nombre": "🪙 +10.000 Galeones", "valor": 10000 },
+                { "nombre": "Puedes robarle 10.000 Galeones a alguien del caldero 🪙", "valor": 10000 },
+                { "nombre": "Diadema de Ravenclaw 👑🧠", "valor": 6500 },
+                { "nombre": "Copa de Hufflepuff 🏆🧡", "valor": 7000 },
+                { "nombre": "Deluminador 💡🕳️", "valor": 7500 },
+                { "nombre": "Bola de Cristal 🔮", "valor": 8000 },
+                { "nombre": "Espada de Godric Gryffindor ⚔️🦁", "valor": 9000 },
+                { "nombre": "Espejo de Oesed 🪞💭", "valor": 10000 },
+                { "nombre": "Bolsa sin fondo de Hermione 👜📦", "valor": 10000 },
+                { "nombre": "Capa de invisibilidad 🧥✨", "valor": 20000 }
+              ]
+            };
+            
+            // 2. Definimos las probabilidades de cada categoría
+            const probabilidades = {
+                Trastos: 0.40,       // 45% de probabilidad
+                Coleccionables: 0.35, // 35% de probabilidad
+                Tesoros: 0.15,        // 15% de probabilidad
+                Reliquias: 0.10       // 5% de probabilidad
+            };
+
+            // 3. Función para elegir un efecto basado en el nuevo sistema
+            const elegirEfectoAleatorio = () => {
+                const aleatorio = Math.random();
+                let acumulado = 0;
+
+                for (const categoria in probabilidades) {
+                    acumulado += probabilidades[categoria];
+                    if (aleatorio < acumulado) {
+                        const listaPremios = premios[categoria];
+                        const indiceAleatorio = Math.floor(Math.random() * listaPremios.length);
+                        // Devolvemos el nombre del premio, no el objeto completo
+                        return listaPremios[indiceAleatorio].nombre;
+                    }
+                }
+                // Como fallback, si algo sale mal, devuelve un Trasto
+                const listaFallback = premios.Trastos;
+                // Devolvemos el nombre del premio, no el objeto completo
+                return listaFallback[Math.floor(Math.random() * listaFallback.length)].nombre;
+            };
+
+            // --- FIN: NUEVO SISTEMA DE PREMIOS ---
+
+
+            // --- ELEMENTOS DEL DOM ---
+            const cantidadGrageasInput = document.getElementById('cantidadGrageas');
+            const grageasContainer = document.getElementById('grageasContainer');
+            const abrirBtn = document.getElementById('abrirBtn');
+            const resultadoTextoDecorado = document.getElementById('resultadoTextoDecorado');
+            const resultadoTextoSimple = document.getElementById('resultadoTextoSimple');
+            const simpleTitle = document.getElementById('simpleTitle');
+            const copiarBtnDecorado = document.getElementById('copiarBtnDecorado');
+            const copiarBtnSimple = document.getElementById('copiarBtnSimple');
+            const saboresList = document.getElementById('saboresList');
+            const copiadoMsg = document.getElementById('copiadoMsg');
+            const tabDecorado = document.getElementById('tabDecorado');
+            const tabSimple = document.getElementById('tabSimple');
+            const panelDecorado = document.getElementById('panelDecorado');
+            const panelSimple = document.getElementById('panelSimple');
+
+            // --- FUNCIONES ---
+
+            const generarSelectores = (cantidad) => {
+                grageasContainer.innerHTML = '';
+                for (let i = 1; i <= cantidad; i++) {
+                    const grageaDiv = document.createElement('div');
+                    grageaDiv.className = 'bg-gray-700 p-4 rounded-lg border border-gray-600';
+                    grageaDiv.innerHTML = `<h3 class="text-lg font-semibold text-yellow-300 mb-3">Gragea ${i}</h3>`;
+
+                    const selectorContainer = document.createElement('div');
+                    selectorContainer.className = 'space-y-2';
+
+                    for (let j = 1; j <= 3; j++) {
+                        const select = document.createElement('select');
+                        select.className = 'sabor-select w-full bg-gray-600 border border-gray-500 text-white text-sm rounded-lg focus:ring-yellow-500 focus:border-yellow-500 p-2';
+                        sabores.forEach(sabor => {
+                            const option = document.createElement('option');
+                            option.value = sabor.emoji;
+                            option.dataset.tipo = sabor.tipo;
+                            option.textContent = `${sabor.emoji} ${sabor.tipo}`;
+                            select.appendChild(option);
+                        });
+                        selectorContainer.appendChild(select);
+                    }
+                    grageaDiv.appendChild(selectorContainer);
+                    grageasContainer.appendChild(grageaDiv);
+                }
+            };
+
+            const poblarListaSabores = () => {
+                saboresList.innerHTML = '';
+                sabores.sort((a, b) => a.tipo.localeCompare(b.tipo)).forEach(sabor => {
+                    const div = document.createElement('div');
+                    div.className = 'bg-gray-700 p-2 rounded-md';
+                    div.textContent = `${sabor.emoji} ${sabor.tipo}`;
+                    saboresList.appendChild(div);
+                });
+            };
+
+            const abrirGrageas = () => {
+                let resultadoDecorado = '⋆ ————————✧◦🍻◦✧———————— ⋆\n\n';
+                resultadoDecorado += '╰┈➤ ɢʀᴀɢᴇᴀ ᴅᴇ ᴛᴏᴅᴏꜱ ʟᴏꜱ ꜱᴀʙᴏʀᴇꜱ 🫘\n\n';
+
+                let resultadoSimple = '';
+                let simpleCounter = 1;
+
+                const grageas = grageasContainer.children;
+                for (let i = 0; i < grageas.length; i++) {
+                    resultadoDecorado += `${i + 1}.\n`;
+
+                    const selects = grageas[i].querySelectorAll('.sabor-select');
+                    selects.forEach(select => {
+                        const emoji = select.value;
+                        const tipo = select.options[select.selectedIndex].dataset.tipo;
+                        
+                        // Usamos la nueva función para obtener un efecto del sistema de rareza
+                        const efectoAleatorio = elegirEfectoAleatorio();
+
+                        resultadoDecorado += `${emoji}→ ${efectoAleatorio}\n`;
+                        resultadoSimple += `${simpleCounter}. ${tipo}: ${efectoAleatorio}\n`;
+                        simpleCounter++;
+                    });
+                    resultadoDecorado += '\n';
+                }
+
+                resultadoDecorado += '⋆ ————————✧◦🍻◦✧———————— ⋆';
+
+                resultadoTextoDecorado.value = resultadoDecorado.trim();
+                
+                simpleTitle.textContent = 'RESULTADOS';
+                resultadoTextoSimple.innerText = resultadoSimple.trim();
+            };
+
+            const copiarResultado = (viewType) => {
+                let textToCopy = '';
+                if (viewType === 'decorado') {
+                    textToCopy = document.getElementById('resultadoTextoDecorado').value;
+                } else if (viewType === 'simple') {
+                    const title = simpleTitle.textContent;
+                    const content = resultadoTextoSimple.innerText;
+                    textToCopy = `${title}\n\n${content}`;
+                }
+
+                if (!textToCopy) return;
+
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+
+                try {
+                    document.execCommand('copy');
+                    copiadoMsg.classList.remove('opacity-0');
+                    setTimeout(() => {
+                        copiadoMsg.classList.add('opacity-0');
+                    }, 1500);
+                } catch (err) {
+                    console.error('Error al intentar copiar: ', err);
+                }
+
+                document.body.removeChild(tempTextArea);
+                window.getSelection().removeAllRanges();
+            };
+
+            const cambiarPestaña = (tabActiva) => {
+                if (tabActiva === 'decorado') {
+                    panelDecorado.classList.remove('hidden');
+                    panelDecorado.classList.add('flex');
+                    panelSimple.classList.add('hidden');
+                    panelSimple.classList.remove('flex');
+
+                    tabDecorado.classList.add('active');
+                    tabSimple.classList.remove('active');
+                } else {
+                    panelSimple.classList.remove('hidden');
+                    panelSimple.classList.add('flex');
+                    panelDecorado.classList.add('hidden');
+                    panelDecorado.classList.remove('flex');
+
+                    tabSimple.classList.add('active');
+                    tabDecorado.classList.remove('active');
+                }
+            };
+
+            // --- EVENT LISTENERS ---
+
+            cantidadGrageasInput.addEventListener('change', (e) => {
+                let val = parseInt(e.target.value, 10);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > 5) val = 5;
+                e.target.value = val;
+                generarSelectores(val);
+            });
+
+            abrirBtn.addEventListener('click', abrirGrageas);
+            copiarBtnDecorado.addEventListener('click', () => copiarResultado('decorado'));
+            copiarBtnSimple.addEventListener('click', () => copiarResultado('simple'));
+
+            tabDecorado.addEventListener('click', () => cambiarPestaña('decorado'));
+            tabSimple.addEventListener('click', () => cambiarPestaña('simple'));
+
+            // --- INICIALIZACIÓN ---
+            poblarListaSabores();
+            generarSelectores(parseInt(cantidadGrageasInput.value, 10));
+            cambiarPestaña('decorado');
+        });
+    </script>
+</body>
+</html>
