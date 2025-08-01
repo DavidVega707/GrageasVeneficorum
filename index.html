@@ -204,7 +204,9 @@
 
             // 1. Definimos las listas de premios por categoría
             const premios = {
-              "Trastos": 
+              "Trastos": [
+                { "nombre": "🪙 -10.000 Galeones", "valor": -10000 },
+                { "nombre": "🪙 -7.000 Galeones", "valor": -7000 },
                 { "nombre": "🪙 -5.000 Galeones", "valor": -5000 },
                 { "nombre": "🪙 -3.000 Galeones", "valor": -3000 },
                 { "nombre": "🪙 -2.000 Galeones", "valor": -2000 },
@@ -241,8 +243,6 @@
                 { "nombre": "Escoba voladora 🧹🪽", "valor": 2500 },
                 { "nombre": "Horcruxes en general 🖤⚠️", "valor": 2700 },
                 { "nombre": "Varita mágica 🪄", "valor": 3000 }
-                { "nombre": "🪙 -10.000 Galeones", "valor": -10000 },
-                { "nombre": "🪙 -7.000 Galeones", "valor": -7000 }
               ],
               "Tesoros": [
                 { "nombre": "🪙 +1.500 Galeones", "valor": 1500 },
@@ -280,10 +280,10 @@
             
             // 2. Definimos las probabilidades de cada categoría
             const probabilidades = {
-                Trastos: 0.40,       // 45% de probabilidad
+                Trastos: 0.45,       // 45% de probabilidad
                 Coleccionables: 0.35, // 35% de probabilidad
                 Tesoros: 0.15,        // 15% de probabilidad
-                Reliquias: 0.10       // 5% de probabilidad
+                Reliquias: 0.05       // 5% de probabilidad
             };
 
             // 3. Función para elegir un efecto basado en el nuevo sistema
